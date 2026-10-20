@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ckavqb25bdaul"]
 
 [ext_resource type="PackedScene" uid="uid://be8qbmt0fe144" path="res://Objects/player.tscn" id="1_a02cp"]
-[ext_resource type="ArrayMesh" uid="uid://dayv27bj0hd5i" path="res://Model/Environment/grass.res" id="1_k7acu"]
+[ext_resource type="ArrayMesh" uid="uid://cb50pq0la85n0" path="res://Model/Environment/grass.res" id="1_k7acu"]
 [ext_resource type="PackedScene" uid="uid://b6xk1cejxlr63" path="res://Model/CliffProps/cliffProps2.glb" id="2_5ukr8"]
 [ext_resource type="PackedScene" uid="uid://cy5begadsuf37" path="res://Model/CliffProps/cliffProps1.glb" id="3_o06y3"]
 [ext_resource type="PackedScene" uid="uid://c5ujexsck0iyn" path="res://Model/CliffProps/cliffProps3.glb" id="4_k7acu"]
@@ -20,7 +20,7 @@ size = Vector2(50, 50)
 orientation = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ixqda"]
-albedo_color = Color(0.7749688, 0.99223393, 0.4255394, 1)
+albedo_color = Color(0.3745887, 0.5744865, 0.27897537, 1)
 
 [sub_resource type="MultiMesh" id="MultiMesh_5v1tr"]
 transform_format = 1
@@ -30,6 +30,19 @@ buffer = PackedFloat32Array(-0.6238687, 0, -0.7828084, 0.33081818, 0, 1.001, 0, 
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_inext"]
 size = Vector3(50, 5, 1)
+
+[sub_resource type="Environment" id="Environment_836wa"]
+background_mode = 1
+background_color = Color(0.5250186, 0.7762202, 0.99215597, 1)
+ssao_enabled = true
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
+volumetric_fog_density = 0.01
+
+[sub_resource type="PrismMesh" id="PrismMesh_836wa"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k7acu"]
+points = PackedVector3Array(0, 0.5, 0.5, 0.5, -0.5, 0.5, 0, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [node name="World" type="Node3D" unique_id=1996044657]
 
@@ -45,13 +58,18 @@ mesh = SubResource("QuadMesh_ixqda")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="Floor" unique_id=1800399921]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23371792, 0)
+visible = false
 material_override = SubResource("StandardMaterial3D_ixqda")
 multimesh = SubResource("MultiMesh_5v1tr")
 
 [node name="Player" parent="." unique_id=419475376 instance=ExtResource("1_a02cp")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1471276067]
-transform = Transform3D(0.523132, 0.85225165, 0, 0.0056423503, -0.0034634068, 0.99997807, 0.85223293, -0.5231205, -0.0066205217, 18.552498, 22.583822, 4.890147)
+transform = Transform3D(0.5231321, 0.85225165, -1.9843031e-10, 0.0056423508, -0.0034634073, 0.9999781, 0.852233, -0.52312064, -0.006620522, 18.552498, 22.583822, 49.09675)
+light_energy = 1.5
+light_indirect_energy = 1.5
+light_volumetric_fog_energy = 2.0
+shadow_enabled = true
 
 [node name="Cliffs" type="StaticBody3D" parent="." unique_id=581612042]
 
@@ -325,3 +343,16 @@ shape = SubResource("BoxShape3D_inext")
 
 [node name="Tree" parent="." unique_id=2041742611 instance=ExtResource("7_o06y3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.816333, 0, 9.450095)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1019716654]
+environment = SubResource("Environment_836wa")
+
+[node name="Ramp" type="StaticBody3D" parent="." unique_id=1277669904]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp" unique_id=1254553074]
+transform = Transform3D(5.174579, 0, 0, 0, 1.4636639, 0, 0, 0, 6.8884335, -7.409, 0.7, -17.412)
+mesh = SubResource("PrismMesh_836wa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp" unique_id=854820154]
+transform = Transform3D(5.174579, 0, 0, 0, 1.4636639, 0, 0, 0, 6.8884335, -7.409, 0.7, -17.412)
+shape = SubResource("ConvexPolygonShape3D_k7acu")
