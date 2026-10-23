@@ -58,7 +58,6 @@ mesh = SubResource("QuadMesh_ixqda")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="Floor" unique_id=1800399921]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23371792, 0)
-visible = false
 material_override = SubResource("StandardMaterial3D_ixqda")
 multimesh = SubResource("MultiMesh_5v1tr")
 

@@ -1,0 +1,12 @@
+DONE:
+	- added "Head" spatial node (not sure what for yet, need to look into this)
+	- created and added a crosshair
+TODO:
+	- velocity on screen
+	- Character model
+	- Add first person view of hands
+	- build more geometry to test movement
+	- mess with movement
+	- add items and ability to equip/have an inventory
+	- add a weapon
+	

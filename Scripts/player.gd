@@ -5,7 +5,9 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 
 var sensitivity = 0.003
-@onready var camera = $Camera3D
+var display_velocity
+@onready var camera = $Head/Camera3D
+@onready var label: Label = $CanvasLayer/Control/Label
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -40,5 +42,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+	
+	display_velocity = Vector2(velocity.x, velocity.z).length()	
+	label.text = str(int(display_velocity))
 
 	move_and_slide()

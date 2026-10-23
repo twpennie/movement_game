@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://be8qbmt0fe144"]
 
 [ext_resource type="Script" uid="uid://u2vqh51cevnw" path="res://Scripts/player.gd" id="1_y0qk3"]
+[ext_resource type="Texture2D" uid="uid://drbomp220f0q6" path="res://Objects/crosshair.png" id="2_3y5cq"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_836wa"]
 radius = 0.4
@@ -9,7 +10,28 @@ height = 1.8
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y0qk3"]
 
 [node name="Player" type="CharacterBody3D" unique_id=419475376]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43358433, 0)
 script = ExtResource("1_y0qk3")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2146110981]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=157011984]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Control" unique_id=621575993]
+layout_mode = 0
+offset_left = 947.0
+offset_top = 560.0
+offset_right = 975.0
+offset_bottom = 583.0
+text = "0"
+horizontal_alignment = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
 transform = Transform3D(0.9999755, 0.006369576, -0.0029113512, -0.006354559, 0.9999666, 0.005142485, 0.0029439842, -0.0051238723, 0.9999826, 0, 1.4233459, 0)
@@ -19,5 +41,15 @@ mesh = SubResource("CapsuleMesh_836wa")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3351741, 0)
 shape = SubResource("CapsuleShape3D_y0qk3")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=973602025]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4726584, 0)
+[node name="Head" type="Node3D" parent="." unique_id=192353539]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8943181, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=973602025]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.050920248, 0)
+
+[node name="TextureRect" type="TextureRect" parent="Head/Camera3D" unique_id=907340922]
+offset_left = 940.0
+offset_top = 520.0
+offset_right = 980.0
+offset_bottom = 560.0
+texture = ExtResource("2_3y5cq")
