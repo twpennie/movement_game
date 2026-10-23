@@ -6,6 +6,7 @@ DONE:
 	- character model (kind of)
 TODO:
 	- advanced movement
+	- learn blender
 	- Add first person view of hands
 	- build more geometry to test movement
 	- add items and ability to equip/have an inventory
