@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://be8qbmt0fe144"]
 
 [ext_resource type="Script" uid="uid://u2vqh51cevnw" path="res://Scripts/player.gd" id="1_y0qk3"]
+[ext_resource type="Texture2D" uid="uid://cputc457hxi1h" path="res://Model/Skeleton/textures/albedo_indexed.webp" id="2_0ad8t"]
 [ext_resource type="Texture2D" uid="uid://drbomp220f0q6" path="res://Objects/crosshair.png" id="2_3y5cq"]
+[ext_resource type="ArrayMesh" uid="uid://q6skahkp0g64" path="res://Model/Skeleton/skeleton_array_mesh.tres" id="3_x20fu"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_836wa"]
-radius = 0.4
-height = 1.8
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gt2fw"]
+albedo_texture = ExtResource("2_0ad8t")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y0qk3"]
 
@@ -34,8 +35,9 @@ text = "0"
 horizontal_alignment = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
-transform = Transform3D(0.9999755, 0.006369576, -0.0029113512, -0.006354559, 0.9999666, 0.005142485, 0.0029439842, -0.0051238723, 0.9999826, 0, 1.4233459, 0)
-mesh = SubResource("CapsuleMesh_836wa")
+transform = Transform3D(-0.9999756, -0.0069812606, 8.7421576e-08, -0.006981164, 0.9999619, 0.005235964, -3.6641046e-05, 0.005235836, -0.9999863, 0, 0.44603193, 0)
+material_override = SubResource("StandardMaterial3D_gt2fw")
+mesh = ExtResource("3_x20fu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=454511934]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3351741, 0)
