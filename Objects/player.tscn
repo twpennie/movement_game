@@ -27,6 +27,7 @@ mouse_filter = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
 transform = Transform3D(-0.9999756, -0.0069812606, 8.7421576e-08, -0.006981164, 0.9999619, 0.005235964, -3.6641046e-05, 0.005235836, -0.9999863, 0, 0.44603193, 0)
+layers = 2
 material_override = SubResource("StandardMaterial3D_gt2fw")
 mesh = ExtResource("3_x20fu")
 
@@ -39,6 +40,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8943181, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head" unique_id=973602025]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.050920248, 0)
+cull_mask = 1048573
 
 [node name="TextureRect" type="TextureRect" parent="Head/Camera3D" unique_id=907340922]
 offset_left = 940.0

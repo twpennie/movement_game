@@ -14,7 +14,7 @@ var gravity : float = 20
 var jump : float = 12
 
 var cam_accel : float = 40
-var mouse_sense : float = 0.03
+var mouse_sense : float = 0.06
 
 var direction : Vector3
 var gravity_vec : Vector3
