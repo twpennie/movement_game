@@ -11,7 +11,7 @@ var display_velocity
 
 var speed : float = 15
 var gravity : float = 20
-var jump : float = 12
+var jump : float = 7
 
 var cam_accel : float = 40
 var mouse_sense : float = 0.06
@@ -23,6 +23,7 @@ enum MOVESTATES {
 	GROUNDED,
 	AIRBORN,
 	CROUCHED,
+	SLIDING,
 }
 
 var currentState : MOVESTATES = MOVESTATES.AIRBORN
