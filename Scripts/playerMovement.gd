@@ -120,6 +120,7 @@ func ground(delta : float) -> void:
 			#toSlide()
 	#else:
 		#move(delta, crouchAccel, floorDrag)
+	
 	return
 
 func air(delta : float) -> void:
@@ -133,6 +134,11 @@ func air(delta : float) -> void:
 		gravity_vec = Vector3.DOWN * gravity * delta
 	
 	move(delta, airAccel, airDrag)
+	
+	if is_on_floor():
+		changeState(MOVESTATES.GROUNDED)
+		emit_signal("justLanded")
+		canJump = true
 	
 	# TODO: test this
 	if Input.is_action_just_pressed("jump"):
