@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://be8qbmt0fe144"]
 
-[ext_resource type="Script" uid="uid://u2vqh51cevnw" path="res://Scripts/player.gd" id="1_y0qk3"]
+[ext_resource type="Script" uid="uid://u2vqh51cevnw" path="res://Scripts/playerMovement.gd" id="1_y0qk3"]
 [ext_resource type="Texture2D" uid="uid://cputc457hxi1h" path="res://Model/Skeleton/textures/albedo_indexed.webp" id="2_0ad8t"]
 [ext_resource type="Texture2D" uid="uid://drbomp220f0q6" path="res://Objects/crosshair.png" id="2_3y5cq"]
 [ext_resource type="ArrayMesh" uid="uid://q6skahkp0g64" path="res://Model/Skeleton/skeleton_array_mesh.tres" id="3_x20fu"]
@@ -24,15 +24,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/Control" unique_id=621575993]
-layout_mode = 0
-offset_left = 947.0
-offset_top = 560.0
-offset_right = 975.0
-offset_bottom = 583.0
-text = "0"
-horizontal_alignment = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
 transform = Transform3D(-0.9999756, -0.0069812606, 8.7421576e-08, -0.006981164, 0.9999619, 0.005235964, -3.6641046e-05, 0.005235836, -0.9999863, 0, 0.44603193, 0)

@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://be8qbmt0fe144" path="res://Objects/player.tscn" id="1_a02cp"]
 [ext_resource type="ArrayMesh" uid="uid://cb50pq0la85n0" path="res://Model/Environment/grass.res" id="1_k7acu"]
 [ext_resource type="PackedScene" uid="uid://b6xk1cejxlr63" path="res://Model/CliffProps/cliffProps2.glb" id="2_5ukr8"]
+[ext_resource type="Curve" uid="uid://cidft4romtj4m" path="res://Curves/45degreecurve.tres" id="3_5v1tr"]
 [ext_resource type="PackedScene" uid="uid://cy5begadsuf37" path="res://Model/CliffProps/cliffProps1.glb" id="3_o06y3"]
 [ext_resource type="PackedScene" uid="uid://c5ujexsck0iyn" path="res://Model/CliffProps/cliffProps3.glb" id="4_k7acu"]
 [ext_resource type="PackedScene" uid="uid://bjrqhx8tpb8rt" path="res://Model/CliffProps/cliffProps4.glb" id="5_5v1tr"]
@@ -62,6 +63,8 @@ material_override = SubResource("StandardMaterial3D_ixqda")
 multimesh = SubResource("MultiMesh_5v1tr")
 
 [node name="Player" parent="." unique_id=419475376 instance=ExtResource("1_a02cp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.299302, 0)
+airStrafeCurve = ExtResource("3_5v1tr")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1471276067]
 transform = Transform3D(0.5231321, 0.85225165, -1.9843031e-10, 0.0056423508, -0.0034634073, 0.9999781, 0.852233, -0.52312064, -0.006620522, 18.552498, 22.583822, 49.09675)
