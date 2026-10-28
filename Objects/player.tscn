@@ -5,27 +5,28 @@
 [ext_resource type="Curve" uid="uid://cidft4romtj4m" path="res://Curves/45degreecurve.tres" id="2_x20fu"]
 [ext_resource type="ArrayMesh" uid="uid://q6skahkp0g64" path="res://Model/Skeleton/skeleton_array_mesh.tres" id="3_x20fu"]
 [ext_resource type="Texture2D" uid="uid://bnjhlas7hnw3j" path="res://Objects/dot_crosshair.png" id="5_x20fu"]
+[ext_resource type="Script" uid="uid://cxwe1740x70jo" path="res://Scripts/dev_hud.gd" id="6_0ar0x"]
+[ext_resource type="FontFile" uid="uid://q1uce61q5458" path="res://etc/fonts/cairopixel/Cairopixel.ttf" id="7_slvmq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gt2fw"]
 albedo_texture = ExtResource("2_0ad8t")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y0qk3"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_ng3n2"]
+font = ExtResource("7_slvmq")
+font_size = 25
+font_color = Color(0.0018410678, 0.0018410682, 0.0018410678, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_836wa"]
+font = ExtResource("7_slvmq")
+font_size = 25
+font_color = Color(0.0035191667, 0.0035191681, 0.0035191672, 1)
+
 [node name="Player" type="CharacterBody3D" unique_id=419475376]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43358433, 0)
 script = ExtResource("1_y0qk3")
 airStrafeCurve = ExtResource("2_x20fu")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2146110981]
-
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=157011984]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
 transform = Transform3D(-0.9999756, -0.0069812606, 8.7421576e-08, -0.006981164, 0.9999619, 0.005235964, -3.6641046e-05, 0.005235836, -0.9999863, 0, 0.44603193, 0)
@@ -51,3 +52,34 @@ offset_top = 520.0
 offset_right = 980.0
 offset_bottom = 560.0
 texture = ExtResource("5_x20fu")
+
+[node name="DevHUD" type="CanvasLayer" parent="." unique_id=653256366 node_paths=PackedStringArray("player")]
+script = ExtResource("6_0ar0x")
+player = NodePath("..")
+
+[node name="Control" type="Control" parent="DevHUD" unique_id=796940640]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DevHUD/Control" unique_id=1113136272]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 11.0
+offset_right = 388.0
+offset_bottom = 218.0
+
+[node name="VelocityLabel" type="Label" parent="DevHUD/Control/VBoxContainer" unique_id=558157242]
+layout_mode = 2
+text = "velocity: "
+label_settings = SubResource("LabelSettings_ng3n2")
+
+[node name="StateLabel" type="Label" parent="DevHUD/Control/VBoxContainer" unique_id=1103952193]
+layout_mode = 2
+text = "currentState: "
+label_settings = SubResource("LabelSettings_836wa")
+
+[connection signal="signal_state_change" from="." to="DevHUD" method="_on_player_signal_state_change"]

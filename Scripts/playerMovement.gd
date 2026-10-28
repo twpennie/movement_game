@@ -1,8 +1,6 @@
 extends CharacterBody3D
 class_name PlayerMovement
 
-var display_velocity
-
 @onready var head : Node3D = $Head
 @onready var camera : Camera3D = $Head/Camera3D
 @onready var collider : CollisionShape3D = $CollisionShape3D
@@ -62,11 +60,16 @@ var jumpQueued : bool = false
 #const crouchSpeed : float = 8; const crouchAccel : float = 4
 
 #Signals
-signal justJumped; signal justLanded;
+signal signal_state_change(newState: String)
 
 func changeState(newState : MOVESTATES) -> void:
 	previousState = currentState
 	currentState = newState
+	match currentState:
+		MOVESTATES.GROUNDED:
+			signal_state_change.emit("GROUNDED")
+		MOVESTATES.AIRBORN:
+			signal_state_change.emit("AIRBORN")
 	
 
 # exponential decay function (lerp)
@@ -99,7 +102,6 @@ func _physics_process(delta: float) -> void:
 		canJump = false
 		hasJumped = true
 		jumpQueued = false
-		emit_signal("justJumped")
 		
 		if currentState != MOVESTATES.AIRBORN:
 			changeState(MOVESTATES.AIRBORN)
@@ -138,7 +140,6 @@ func air(delta : float) -> void:
 	
 	if is_on_floor():
 		changeState(MOVESTATES.GROUNDED)
-		emit_signal("justLanded")
 		canJump = true
 	
 	# TODO: test this
