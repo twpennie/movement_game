@@ -82,4 +82,10 @@ layout_mode = 2
 text = "currentState: "
 label_settings = SubResource("LabelSettings_836wa")
 
+[node name="MovementModeLabel" type="Label" parent="DevHUD/Control/VBoxContainer" unique_id=540911722]
+layout_mode = 2
+text = "movementMode: "
+label_settings = SubResource("LabelSettings_836wa")
+
+[connection signal="signal_movement_mode_change" from="." to="DevHUD" method="_on_player_signal_movement_mode_change"]
 [connection signal="signal_state_change" from="." to="DevHUD" method="_on_player_signal_state_change"]

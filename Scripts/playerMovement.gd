@@ -17,6 +17,27 @@ var mouse_sense : float = 0.06
 var direction : Vector3
 var gravity_vec : Vector3
 
+# DEV ONLY
+enum TEST_MOVEMENT_MODES {
+	NORMAL,
+	SKIS,
+	BHOP,
+}
+
+var movementModeList : Array[TEST_MOVEMENT_MODES] = [
+TEST_MOVEMENT_MODES.NORMAL,
+TEST_MOVEMENT_MODES.SKIS,
+TEST_MOVEMENT_MODES.BHOP,
+]
+
+# position in list
+var currentMovementModeIndex : int = 0
+
+var currentMovementMode : TEST_MOVEMENT_MODES = TEST_MOVEMENT_MODES.NORMAL
+signal signal_movement_mode_change(newMode: String)
+
+# END DEV ONLY
+
 enum MOVESTATES {
 	GROUNDED,
 	AIRBORN,
@@ -71,12 +92,24 @@ func changeState(newState : MOVESTATES) -> void:
 		MOVESTATES.AIRBORN:
 			signal_state_change.emit("AIRBORN")
 	
+# DEV ONLY
+func cycleMovementMode() -> void:
+	if currentMovementModeIndex == 2:
+		currentMovementModeIndex = 0
+	else:
+		currentMovementModeIndex += 1
+	
+	currentMovementMode = movementModeList[currentMovementModeIndex] 
+	
+	signal_movement_mode_change.emit(TEST_MOVEMENT_MODES.keys()[currentMovementMode])
+# END DEV ONLY
 
 # exponential decay function (lerp)
 # current = target + (current - target) * exp(-decayConstant * deltaTime)
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	signal_movement_mode_change.emit("NORMAL")
 
 # mouse movement
 func _input(event: InputEvent) -> void:
@@ -89,6 +122,8 @@ func _input(event: InputEvent) -> void:
 func _process(_delta: float):
 	if Input.is_action_just_pressed("escape"):
 		get_tree().quit()
+	if Input.is_action_just_pressed("z"):
+		cycleMovementMode()
 	
 func _physics_process(delta: float) -> void:
 	match currentState:
