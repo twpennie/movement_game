@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dpporlrpao5ha"]
+
+[ext_resource type="PackedScene" uid="uid://c4k5upd1ynp2" path="res://Model/Mountain/Mountain.glb" id="1_t8gq5"]
+[ext_resource type="Texture2D" uid="uid://chrke1mr8dack" path="res://addons/godot-prototype-texture/PNG/grid_512x512/grid_blue_512x512.png" id="2_t8gq5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s1mue"]
+albedo_color = Color(0.7204674, 0.7204675, 0.7204674, 1)
+albedo_texture = ExtResource("2_t8gq5")
+albedo_texture_force_srgb = true
+uv1_scale = Vector3(3, 3, 3)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 1.1486986
+
+[node name="Mountain" unique_id=1707135617 instance=ExtResource("1_t8gq5")]
+
+[node name="Landscape_003" parent="." index="0" unique_id=1103521503]
+surface_material_override/0 = SubResource("StandardMaterial3D_s1mue")

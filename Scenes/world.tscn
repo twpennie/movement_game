@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://be8qbmt0fe144" path="res://Objects/player.tscn" id="1_a02cp"]
 [ext_resource type="Texture2D" uid="uid://ck217thdrinnf" path="res://addons/godot-prototype-texture/PNG/grid_1024x1024/grid_black_1024x1024.png" id="1_go701"]
+[ext_resource type="PackedScene" uid="uid://dpporlrpao5ha" path="res://Scenes/mountain.tscn" id="3_5a7ea"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_836wa"]
 size = Vector3(50, 1, 50)
@@ -25,15 +26,10 @@ sdfgi_enabled = true
 sdfgi_use_occlusion = true
 volumetric_fog_density = 0.01
 
-[sub_resource type="PrismMesh" id="PrismMesh_836wa"]
-
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_k7acu"]
-points = PackedVector3Array(0, 0.5, 0.5, 0.5, -0.5, 0.5, 0, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
-
 [node name="World" type="Node3D" unique_id=1996044657]
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=973364422]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+transform = Transform3D(5.6124, 0, 0, 0, 5, 0, 0, 0, 7.0336776, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=1678434939]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -44,7 +40,7 @@ material_override = SubResource("StandardMaterial3D_c5val")
 mesh = SubResource("QuadMesh_ixqda")
 
 [node name="Player" parent="." unique_id=419475376 instance=ExtResource("1_a02cp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.299302, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -101.802246, 0.6881833, 0)
 fovLerpSpeed = 3.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1471276067]
@@ -57,12 +53,5 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1019716654]
 environment = SubResource("Environment_836wa")
 
-[node name="Ramp" type="StaticBody3D" parent="." unique_id=1277669904]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp" unique_id=1254553074]
-transform = Transform3D(5.174579, 0, 0, 0, 1.4636639, 0, 0, 0, 6.8884335, -7.409, 0.7, -17.412)
-mesh = SubResource("PrismMesh_836wa")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp" unique_id=854820154]
-transform = Transform3D(5.174579, 0, 0, 0, 1.4636639, 0, 0, 0, 6.8884335, -7.409, 0.7, -17.412)
-shape = SubResource("ConvexPolygonShape3D_k7acu")
+[node name="Mountain" parent="." unique_id=1707135617 instance=ExtResource("3_5a7ea")]
+transform = Transform3D(29.382933, 0, 0, 0, 33.879322, 0, 0, 0, 30.63742, 23.373337, -0.8144138, -31.088814)
