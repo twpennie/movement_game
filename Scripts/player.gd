@@ -9,10 +9,6 @@ class_name Player
 
 var movementMode : MovementMode = NormalMovementMode.new()
 
-var speed : float = 15
-var gravity : float = 20
-var jump : float = 7
-
 var cam_accel : float = 40
 var mouse_sense : float = 0.06
 
@@ -85,6 +81,13 @@ func cycleMovementMode() -> void:
 		currentMovementModeIndex += 1
 	
 	currentMovementMode = movementModeList[currentMovementModeIndex] 
+	match currentMovementMode:
+		TEST_MOVEMENT_MODES.BHOP:
+			movementMode = BhopMovementMode.new()
+		TEST_MOVEMENT_MODES.SKIS:
+			movementMode = SkiMovementMode.new()
+		TEST_MOVEMENT_MODES.NORMAL:
+			movementMode = NormalMovementMode.new()
 	
 	signal_movement_mode_change.emit(TEST_MOVEMENT_MODES.keys()[currentMovementMode])
 # END DEV ONLY
@@ -145,12 +148,6 @@ func executeAfterTime(time : float, function : Callable) -> void:
 	await get_tree().create_timer(time).timeout
 	function.call()
 
-func applyForce(force : Vector3) -> void:
-	velocity += force
-
-func slowMovement(amount : float) -> void:
-	velocity *= amount
-
 #func handleCrouch(delta : float, forceCrouch : bool = false, forceUncrouch : bool = false) -> bool:
 	#var height : float = collider.shape.height
 	#var crouching : bool = Input.is_action_pressed("crouch") or (height < fullHeight - 0.1 and ceilingCheck.is_colliding()) or forceCrouch
@@ -162,12 +159,7 @@ func slowMovement(amount : float) -> void:
 	#
 	#return crouching
 
-func getHorizontalAngle(vec1 : Vector3, vec2 : Vector3) -> float:
-	vec1.y = 0
-	vec2.y = 0
-	return abs(vec1.angle_to(vec2))
-
-func move(delta: float, accel : float, drag : float, speed : float = speed) -> void:
+func move(delta: float, accel : float, drag : float, speed : float = movementMode.speed) -> void:
 	#get keyboard input
 	direction = Vector3.ZERO
 	var h_rot : float = global_transform.basis.get_euler().y
@@ -180,7 +172,7 @@ func move(delta: float, accel : float, drag : float, speed : float = speed) -> v
 	#Airstrafing
 	match currentState:
 		MOVESTATES.AIRBORN:
-				var angle_diff : float = rad_to_deg(getHorizontalAngle(velocity, wish_vel))
+				var angle_diff : float = rad_to_deg(movementMode.getHorizontalAngle(velocity, wish_vel))
 				var samplePoint = (angle_diff - movementMode.minStrafeAngle) / movementMode.maxStrafeAngle
 				#velocity += wish_vel.normalized() * delta * airStrafeCurve.sample(samplePoint) * airSpeed
 				wish_vel *= 1.0 + (movementMode.airStrafeCurve.sample(samplePoint) * movementMode.airStrafeModifier)

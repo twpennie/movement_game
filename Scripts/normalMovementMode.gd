@@ -1,6 +1,10 @@
 extends MovementMode
 class_name NormalMovementMode
 
+var speed : float = 15
+var gravity : float = 20
+var jump : float = 7
+
 # GROUNDED
 const floorSnapLength : float = 0.4
 const floorAccel : float = 7
@@ -43,10 +47,10 @@ func air(player: CharacterBody3D, delta : float) -> void:
 	
 	# Which way are we going?
 	if player.hasJumped:
-		player.gravity_vec = (player.get_floor_normal() + Vector3.UP).normalized() * player.jump
+		player.gravity_vec = (player.get_floor_normal() + Vector3.UP).normalized() * jump
 		player.hasJumped = false
 	else:
-		player.gravity_vec = Vector3.DOWN * player.gravity * delta
+		player.gravity_vec = Vector3.DOWN * gravity * delta
 	
 	player.move(delta, airAccel, airDrag)
 	
@@ -59,3 +63,14 @@ func air(player: CharacterBody3D, delta : float) -> void:
 		player.queueJump()
 	
 	return
+	
+func applyForce(player: CharacterBody3D, force : Vector3) -> void:
+	player.velocity += force
+
+func slowMovement(player: CharacterBody3D, amount : float) -> void:
+	player.velocity *= amount
+	
+func getHorizontalAngle(vec1 : Vector3, vec2 : Vector3) -> float:
+	vec1.y = 0
+	vec2.y = 0
+	return abs(vec1.angle_to(vec2))
