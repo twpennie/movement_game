@@ -6,7 +6,7 @@ extends CanvasLayer
 @onready var state_label : Label = $Control/VBoxContainer/StateLabel
 @onready var velocity_label : Label = $Control/VBoxContainer/VelocityLabel
 @onready var movement_mode_label: Label = $Control/VBoxContainer/MovementModeLabel
-var display_velocity : float = 0
+var display_velocity : float = 0 
 var display_movement_mode : String = "NORMAL"
 
 # Called when the node enters the scene tree for the first time.

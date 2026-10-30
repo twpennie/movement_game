@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://be8qbmt0fe144"]
 
-[ext_resource type="Script" uid="uid://u2vqh51cevnw" path="res://Scripts/playerMovement.gd" id="1_y0qk3"]
+[ext_resource type="Script" uid="uid://u2vqh51cevnw" path="res://Scripts/player.gd" id="1_y0qk3"]
 [ext_resource type="Texture2D" uid="uid://cputc457hxi1h" path="res://Model/Skeleton/textures/albedo_indexed.webp" id="2_0ad8t"]
-[ext_resource type="Curve" uid="uid://cidft4romtj4m" path="res://Curves/45degreecurve.tres" id="2_x20fu"]
 [ext_resource type="ArrayMesh" uid="uid://q6skahkp0g64" path="res://Model/Skeleton/skeleton_array_mesh.tres" id="3_x20fu"]
 [ext_resource type="Texture2D" uid="uid://bnjhlas7hnw3j" path="res://Objects/dot_crosshair.png" id="5_x20fu"]
-[ext_resource type="Script" uid="uid://cxwe1740x70jo" path="res://Scripts/dev_hud.gd" id="6_0ar0x"]
+[ext_resource type="Script" uid="uid://cxwe1740x70jo" path="res://Scripts/devHud.gd" id="6_0ar0x"]
 [ext_resource type="FontFile" uid="uid://q1uce61q5458" path="res://etc/fonts/cairopixel/Cairopixel.ttf" id="7_slvmq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gt2fw"]
@@ -26,7 +25,6 @@ font_color = Color(0.0035191667, 0.0035191681, 0.0035191672, 1)
 [node name="Player" type="CharacterBody3D" unique_id=419475376]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43358433, 0)
 script = ExtResource("1_y0qk3")
-airStrafeCurve = ExtResource("2_x20fu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
 transform = Transform3D(-0.9999756, -0.0069812606, 8.7421576e-08, -0.006981164, 0.9999619, 0.005235964, -3.6641046e-05, 0.005235836, -0.9999863, 0, 0.44603193, 0)

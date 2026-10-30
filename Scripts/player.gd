@@ -1,11 +1,13 @@
 extends CharacterBody3D
-class_name PlayerMovement
+class_name Player
 
 @onready var head : Node3D = $Head
 @onready var camera : Camera3D = $Head/Camera3D
 @onready var collider : CollisionShape3D = $CollisionShape3D
 @export var speedFovIncrease : float = 5.0
 @export var fovLerpSpeed : float = 5.0
+
+var movementMode : MovementMode = NormalMovementMode.new()
 
 var speed : float = 15
 var gravity : float = 20
@@ -47,23 +49,6 @@ enum MOVESTATES {
 
 var currentState : MOVESTATES = MOVESTATES.AIRBORN
 var previousState : MOVESTATES = MOVESTATES.AIRBORN
-
-# GROUNDED
-const floorSnapLength : float = 0.4
-const floorAccel : float = 7
-const floorDrag : float = 8
-
-# AIRBORN
-const airSnapLength : float = 0.1
-const airAccel : float = 0.5 
-const airSpeed : float = 16.0 
-const airDrag : float = 0.1 
-
-#Air Strafing
-@export var airStrafeCurve : Curve
-const minStrafeAngle : float = 0.0
-const maxStrafeAngle : float = 180.0
-const airStrafeModifier : float = 1.0
 
 #Jumping
 var canJump : bool = true
@@ -128,9 +113,9 @@ func _process(_delta: float):
 func _physics_process(delta: float) -> void:
 	match currentState:
 		MOVESTATES.GROUNDED:
-			ground(delta)
+			movementMode.ground(self, delta)
 		MOVESTATES.AIRBORN:
-			air(delta)
+			movementMode.air(self, delta)
 		#MOVESTATES.CROUCHED:
 		
 	if (Input.is_action_just_pressed("jump") or jumpQueued) and canJump:
@@ -141,47 +126,6 @@ func _physics_process(delta: float) -> void:
 		if currentState != MOVESTATES.AIRBORN:
 			changeState(MOVESTATES.AIRBORN)
 	
-
-func ground(delta : float) -> void:
-	#isCrouching = handleCrouch(delta)
-	
-	floor_snap_length = floorSnapLength
-	gravity_vec = Vector3.ZERO
-	
-	move(delta, floorAccel, floorDrag)
-	groundToAir()
-	
-	# ENTER SLIDE CODE
-	#if !isCrouching or (isCrouching and velocity.length() > startSlideThresh):
-		#move(delta, floorAccel, floorDrag)
-		#if isCrouching:
-			#toSlide()
-	#else:
-		#move(delta, crouchAccel, floorDrag)
-	
-	return
-
-func air(delta : float) -> void:
-	floor_snap_length = airSnapLength
-	
-	# Which way are we going?
-	if hasJumped:
-		gravity_vec = (get_floor_normal() + Vector3.UP).normalized() * jump
-		hasJumped = false
-	else:
-		gravity_vec = Vector3.DOWN * gravity * delta
-	
-	move(delta, airAccel, airDrag)
-	
-	if is_on_floor():
-		changeState(MOVESTATES.GROUNDED)
-		canJump = true
-	
-	# TODO: test this
-	if Input.is_action_just_pressed("jump"):
-		queueJump()
-	
-	return
 
 func queueJump() -> void:
 	jumpQueued = true
@@ -237,9 +181,9 @@ func move(delta: float, accel : float, drag : float, speed : float = speed) -> v
 	match currentState:
 		MOVESTATES.AIRBORN:
 				var angle_diff : float = rad_to_deg(getHorizontalAngle(velocity, wish_vel))
-				var samplePoint := (angle_diff - minStrafeAngle) / maxStrafeAngle
+				var samplePoint = (angle_diff - movementMode.minStrafeAngle) / movementMode.maxStrafeAngle
 				#velocity += wish_vel.normalized() * delta * airStrafeCurve.sample(samplePoint) * airSpeed
-				wish_vel *= 1.0 + (airStrafeCurve.sample(samplePoint) * airStrafeModifier)
+				wish_vel *= 1.0 + (movementMode.airStrafeCurve.sample(samplePoint) * movementMode.airStrafeModifier)
 	#
 	#Crouching
 	#if currentState == MOVESTATES.GROUND and isCrouching:
