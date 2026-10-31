@@ -12,8 +12,6 @@ var movementMode : MovementMode = NormalMovementMode.new()
 var cam_accel : float = 40
 var mouse_sense : float = 0.06
 
-var direction : Vector3
-var gravity_vec : Vector3
 
 # DEV ONLY
 enum TEST_MOVEMENT_MODES {
@@ -45,12 +43,6 @@ enum MOVESTATES {
 
 var currentState : MOVESTATES = MOVESTATES.AIRBORN
 var previousState : MOVESTATES = MOVESTATES.AIRBORN
-
-#Jumping
-var canJump : bool = true
-var hasJumped : bool = false
-var coyoteTime : float = 0.2
-var jumpQueued : bool = false
 
 #Crouching
 #@onready var fullHeight : float = collider.shape.height
@@ -121,72 +113,11 @@ func _physics_process(delta: float) -> void:
 			movementMode.air(self, delta)
 		#MOVESTATES.CROUCHED:
 		
-	if (Input.is_action_just_pressed("jump") or jumpQueued) and canJump:
-		canJump = false
-		hasJumped = true
-		jumpQueued = false
+	if (Input.is_action_just_pressed("jump") or movementMode.jumpQueued) and movementMode.canJump:
+		movementMode.canJump = false
+		movementMode.hasJumped = true
+		movementMode.jumpQueued = false
 		
 		if currentState != MOVESTATES.AIRBORN:
 			changeState(MOVESTATES.AIRBORN)
 	
-
-func queueJump() -> void:
-	jumpQueued = true
-	await get_tree().create_timer(coyoteTime).timeout
-	jumpQueued = false
-
-
-func groundToAir() -> bool:
-	if !is_on_floor():
-		changeState(MOVESTATES.AIRBORN)
-		if canJump:
-			executeAfterTime(coyoteTime, func() : if !is_on_floor(): canJump = false)
-		return true
-	return false
-	
-func executeAfterTime(time : float, function : Callable) -> void:
-	await get_tree().create_timer(time).timeout
-	function.call()
-
-#func handleCrouch(delta : float, forceCrouch : bool = false, forceUncrouch : bool = false) -> bool:
-	#var height : float = collider.shape.height
-	#var crouching : bool = Input.is_action_pressed("crouch") or (height < fullHeight - 0.1 and ceilingCheck.is_colliding()) or forceCrouch
-	#crouching = false if forceUncrouch else crouching 
-	#
-	#if height != fullHeight or height != crouchHeight:
-		#collider.shape.height = lerp(collider.shape.height, crouchHeight if crouching else fullHeight, delta * heightLerpSpeed)
-		#head.position.y = lerp(head.position.y, headOffset if !crouching else headOffset/2, delta * heightLerpSpeed)
-	#
-	#return crouching
-
-func move(delta: float, accel : float, drag : float, speed : float = movementMode.speed) -> void:
-	#get keyboard input
-	direction = Vector3.ZERO
-	var h_rot : float = global_transform.basis.get_euler().y
-	var f_input : float = Input.get_axis("forward", "backward")
-	var h_input : float = Input.get_action_strength("right") - Input.get_action_strength("left")
-	direction = Vector3(h_input, 0, f_input).rotated(Vector3.UP, h_rot).normalized()
-	
-	var wish_vel : Vector3 = direction * speed
-	
-	#Airstrafing
-	match currentState:
-		MOVESTATES.AIRBORN:
-				var angle_diff : float = rad_to_deg(movementMode.getHorizontalAngle(velocity, wish_vel))
-				var samplePoint = (angle_diff - movementMode.minStrafeAngle) / movementMode.maxStrafeAngle
-				#velocity += wish_vel.normalized() * delta * airStrafeCurve.sample(samplePoint) * airSpeed
-				wish_vel *= 1.0 + (movementMode.airStrafeCurve.sample(samplePoint) * movementMode.airStrafeModifier)
-	#
-	#Crouching
-	#if currentState == MOVESTATES.GROUND and isCrouching:
-		#wish_vel = direction * crouchSpeed
-	
-	# speeding up or slowing down?
-	if direction.length() > 0:
-		velocity = lerp(velocity, wish_vel, accel * delta)
-	else:
-		velocity = lerp(velocity, wish_vel, drag * delta)
-	
-	velocity += gravity_vec
-	move_and_slide()
-	return
