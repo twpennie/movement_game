@@ -5,7 +5,7 @@
 [ext_resource type="ArrayMesh" uid="uid://q6skahkp0g64" path="res://Model/Skeleton/skeleton_array_mesh.tres" id="3_x20fu"]
 [ext_resource type="Texture2D" uid="uid://bnjhlas7hnw3j" path="res://Objects/dot_crosshair.png" id="5_x20fu"]
 [ext_resource type="Script" uid="uid://cxwe1740x70jo" path="res://Scripts/devHud.gd" id="6_0ar0x"]
-[ext_resource type="FontFile" uid="uid://q1uce61q5458" path="res://etc/fonts/cairopixel/Cairopixel.ttf" id="7_slvmq"]
+[ext_resource type="FontFile" uid="uid://q1uce61q5458" path="res://Etc/fonts/cairopixel/Cairopixel.ttf" id="7_slvmq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gt2fw"]
 albedo_texture = ExtResource("2_0ad8t")

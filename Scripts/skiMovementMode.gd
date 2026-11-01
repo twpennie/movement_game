@@ -1,8 +1,8 @@
 extends NormalMovementMode 
 class_name SkiMovementMode
 
-const slide_start_angle : float = 1
-const max_slide_accel: float = 50 
+const slideStartAngle : float = 1
+const slopeAccel: float = 30 
 const skiDrag : float = 0.1 
 
 # ski strafe
@@ -22,16 +22,31 @@ func ground(player: CharacterBody3D, delta : float) -> void:
 	player.floor_snap_length = floorSnapLength
 	gravity_vec = Vector3.ZERO
 	
-	if current_angle >= slide_start_angle:
+	if current_angle >= slideStartAngle:
 		player.floor_stop_on_slope = false
 		
-		var slide_direction = (Vector3.DOWN - floor_normal * Vector3.DOWN.dot(floor_normal)).normalized()
-		var steepness = remap(current_angle, slide_start_angle, 90.0, 0.0, 1.0)
+		# 1. Calculate the downhill direction vector
+		var slide_direction : Vector3 = (Vector3.DOWN - floor_normal * Vector3.DOWN.dot(floor_normal)).normalized()
+		
+		var steepness = remap(current_angle, slideStartAngle, 90.0, 0.0, 1.0)
 		steepness = clamp(steepness, 0.0, 1.0)
 		
-		var slide_force = slide_direction * (steepness * max_slide_accel)
-		player.velocity += slide_force * delta
+		# 2. Get the clean, flattened direction the player is looking
+		var player_facing_vector : Vector3 = -player.camera.global_transform.basis.z
+		player_facing_vector = Vector3(player_facing_vector.x, 0.0, player_facing_vector.z).normalized()
 		
+		# 3. Find out how much the player's face matches the downhill direction
+		# Returns 1.0 looking perfectly downhill, 0.0 perpendicular, -1.0 perfectly uphill
+		var slope_alignment : float = slide_direction.dot(player_facing_vector)
+		
+		# 4. Calculate total acceleration potential of the slope
+		var total_slope_power : float = steepness * slopeAccel
+		
+		# 5. Apply the force along the player's facing vector, scaled by the slope alignment
+		var final_slide_force : Vector3 = player_facing_vector * (slope_alignment * total_slope_power)
+		
+		player.velocity += final_slide_force * delta
+	
 	move(player, delta, floorAccel, skiDrag)
 	groundToAir(player)
 	
@@ -65,6 +80,3 @@ func move(player: CharacterBody3D, delta: float, accel : float, drag : float) ->
 	player.velocity += gravity_vec
 	player.move_and_slide()
 	return
-
-
-		

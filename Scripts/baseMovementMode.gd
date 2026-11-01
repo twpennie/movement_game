@@ -10,6 +10,3 @@ func ground(player: CharacterBody3D, delta : float) -> void:
 	
 func air(player: CharacterBody3D, delta : float) -> void:
 	pass
-
-func move(player: CharacterBody3D, delta: float, accel : float, drag : float) -> void:
-	pass

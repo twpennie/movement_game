@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://lg4xrjc3m1kj"
-path="res://.godot/imported/Cairopixel.otf-debd01c7d95eea76959273b17a020f4f.fontdata"
+path="res://.godot/imported/Cairopixel.otf-d60d1bd0a5a5472225035f6ba85092c8.fontdata"
 
 [deps]
 
-source_file="res://etc/fonts/cairopixel/Cairopixel.otf"
-dest_files=["res://.godot/imported/Cairopixel.otf-debd01c7d95eea76959273b17a020f4f.fontdata"]
+source_file="res://Etc/fonts/cairopixel/Cairopixel.otf"
+dest_files=["res://.godot/imported/Cairopixel.otf-d60d1bd0a5a5472225035f6ba85092c8.fontdata"]
 
 [params]
 
