@@ -4,16 +4,16 @@ class_name SkiMovementMode
 const slideStartAngle : float = 1
 const slopeAccel: float = 30 
 const skiDrag : float = 0.1 
+const skiFloorAccel : float = 0.5 
 
 # ski strafe
-var skiStrafeCurve : Curve = load("res://Curves/45degreecurve.tres")
+var skiStrafeCurve : Curve = load("res://Curves/tightCurve.tres")
 const minSkiStrafeAngle : float = 0.0
 const maxSkiStrafeAngle : float = 180.0
 const skiStrafeModifier : float = 1.0
 
 func _init() -> void:
 	speed = 2 
-
 
 func ground(player: CharacterBody3D, delta : float) -> void:
 	#isCrouching = handleCrouch(delta)
@@ -47,7 +47,7 @@ func ground(player: CharacterBody3D, delta : float) -> void:
 		
 		player.velocity += final_slide_force * delta
 	
-	move(player, delta, floorAccel, skiDrag)
+	move(player, delta, skiFloorAccel, skiDrag)
 	groundToAir(player)
 	
 	return
@@ -56,21 +56,26 @@ func move(player: CharacterBody3D, delta: float, accel : float, drag : float) ->
 	#get keyboard input
 	direction = Vector3.ZERO
 	var h_rot : float = player.global_transform.basis.get_euler().y
-	var f_input : float = Input.get_axis("forward", "backward")
+	var f_input : float = 0.0
+	
+	# we only want to have forward or backward affect the player if they are moving slowly
+	if player.velocity.length() <= speed:
+		f_input = Input.get_axis("forward", "backward")
+	
 	var h_input : float = Input.get_action_strength("right") - Input.get_action_strength("left")
 	direction = Vector3(h_input, 0, f_input).rotated(Vector3.UP, h_rot).normalized()
 	
-	var wish_vel : Vector3 = direction * speed
+	#var wish_vel : Vector3 = direction * speed
+	var wish_vel : Vector3 = direction * player.velocity.length()
 	
+	# calculate angle between the wish velocity and current velocity, and sample it on the curve
 	var angle_diff : float = rad_to_deg(getHorizontalAngle(player.velocity, wish_vel))
 	var samplePoint = (angle_diff - minSkiStrafeAngle) / maxSkiStrafeAngle
-	#player.velocity += wish_vel.normalized() * delta * skiStrafeCurve.sample(samplePoint) * speed
+	
+	# strength of the wish velocity depends on the value obtained by the curve
 	wish_vel *= 1.0 + (skiStrafeCurve.sample(samplePoint) * skiStrafeModifier)
-	
-	#Crouching
-	#if currentState == MOVESTATES.GROUND and isCrouching:
-		#wish_vel = direction * crouchSpeed
-	
+	print(1.0  + (skiStrafeCurve.sample(samplePoint) * skiStrafeModifier))
+
 	# speeding up or slowing down?
 	if direction.length() > 0:
 		player.velocity = lerp(player.velocity, wish_vel, accel * delta)
