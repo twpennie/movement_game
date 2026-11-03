@@ -25,7 +25,7 @@ func ground(player: CharacterBody3D, delta : float) -> void:
 
 func ski_move(player: CharacterBody3D, delta: float, accel : float, drag : float) -> void:
 	# Gather player input 
-	var input_dir := Input.get_vector("left", "right", "forward", "back")
+	var input_dir := Input.get_vector("left", "right", "forward", "backward")
 	var steer_direction := (player.global_transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 	
 	# add the slope vector to the wish vector
@@ -65,11 +65,12 @@ func ski_move(player: CharacterBody3D, delta: float, accel : float, drag : float
 	if current_speed > 0.1:
 		var applied_drag : float = drag
 		
-		# 6. Optional: Calculate carving/braking friction 
+		# 6. Calculate turn friction 
 		# If the player is actively steering, check how sharp their turn is
 		if steer_direction.length_squared() > 0.0:
-			var turn_angle_match : float = player.velocity.normalized().dot(steer_direction)
+			
 			# turn_angle_match is 1.0 if moving straight, 0.0 if turning hard 90 degrees
+			var turn_angle_match : float = player.velocity.normalized().dot(steer_direction)
 			
 			# Scale friction up when turning aggressively across momentum
 			var carving_friction_factor : float = 0.5 # Increase for more speed-loss on hard turns
