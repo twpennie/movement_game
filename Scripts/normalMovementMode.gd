@@ -106,13 +106,13 @@ func move(player: CharacterBody3D, delta: float, accel : float, drag : float) ->
 	var wish_vel : Vector3 = direction * speed
 	
 	#Airstrafing
-	#match currentState:
-		#MOVESTATES.AIRBORN:
-				#var angle_diff : float = rad_to_deg(movementMode.getHorizontalAngle(velocity, wish_vel))
-				#var samplePoint = (angle_diff - movementMode.minStrafeAngle) / movementMode.maxStrafeAngle
-				##velocity += wish_vel.normalized() * delta * airStrafeCurve.sample(samplePoint) * airSpeed
-				#wish_vel *= 1.0 + (movementMode.airStrafeCurve.sample(samplePoint) * movementMode.airStrafeModifier)
-	#
+	match currentState:
+		MOVESTATES.AIRBORN:
+				var angle_diff : float = rad_to_deg(getHorizontalAngle(player.velocity, wish_vel))
+				var samplePoint = (angle_diff - minStrafeAngle) / maxStrafeAngle
+				#velocity += wish_vel.normalized() * delta * airStrafeCurve.sample(samplePoint) * airSpeed
+				wish_vel *= 1.0 + (airStrafeCurve.sample(samplePoint) * airStrafeModifier)
+	
 	#Crouching
 	#if currentState == MOVESTATES.GROUND and isCrouching:
 		#wish_vel = direction * crouchSpeed

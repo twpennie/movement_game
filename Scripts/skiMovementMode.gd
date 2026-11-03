@@ -2,21 +2,33 @@ extends NormalMovementMode
 class_name SkiMovementMode
 
 const slideStartAngle : float = 1
-const slopeAccel: float = 30 
+const slopeAccel: float = 20 
 const skiDrag : float = 0.1 
 const skiFloorAccel : float = 0.5 
 
 # ski strafe
-var skiStrafeCurve : Curve = load("res://Curves/tightCurve.tres")
+var skiStrafeCurve : Curve = load("res://Curves/45degreecurve.tres")
 const minSkiStrafeAngle : float = 0.0
 const maxSkiStrafeAngle : float = 180.0
 const skiStrafeModifier : float = 1.0
+const skiStrafeSpeed : float = 15
 
 func _init() -> void:
 	speed = 2 
 
 func ground(player: CharacterBody3D, delta : float) -> void:
 	#isCrouching = handleCrouch(delta)
+	ski_move(player, delta, skiFloorAccel, skiDrag)
+	groundToAir(player)
+	
+	return
+
+func ski_move(player: CharacterBody3D, delta: float, accel : float, drag : float) -> void:
+	# Gather player input 
+	var input_dir := Input.get_vector("left", "right", "forward", "back")
+	var steer_direction := (player.global_transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
+	
+	# add the slope vector to the wish vector
 	var floor_normal : Vector3 = player.get_floor_normal()
 	var current_angle : float = rad_to_deg(player.get_floor_angle())
 	player.floor_snap_length = floorSnapLength
@@ -36,52 +48,45 @@ func ground(player: CharacterBody3D, delta : float) -> void:
 		player_facing_vector = Vector3(player_facing_vector.x, 0.0, player_facing_vector.z).normalized()
 		
 		# 3. Find out how much the player's face matches the downhill direction
-		# Returns 1.0 looking perfectly downhill, 0.0 perpendicular, -1.0 perfectly uphill
 		var slope_alignment : float = slide_direction.dot(player_facing_vector)
 		
 		# 4. Calculate total acceleration potential of the slope
 		var total_slope_power : float = steepness * slopeAccel
 		
-		# 5. Apply the force along the player's facing vector, scaled by the slope alignment
-		var final_slide_force : Vector3 = player_facing_vector * (slope_alignment * total_slope_power)
+		# --- TURNING & MOMENTUM HANDLING ---
 		
-		player.velocity += final_slide_force * delta
+		# 5. Gravity always pulls downhill, regardless of where you look
+		var gravity_slide_force : Vector3 = slide_direction * total_slope_power
+		player.velocity += gravity_slide_force * delta
 	
-	move(player, delta, skiFloorAccel, skiDrag)
-	groundToAir(player)
+	# --- FRICTION & DRAG APPLICATION ---
+	var current_speed := player.velocity.length()
 	
-	return
-
-func move(player: CharacterBody3D, delta: float, accel : float, drag : float) -> void:
-	#get keyboard input
-	direction = Vector3.ZERO
-	var h_rot : float = player.global_transform.basis.get_euler().y
-	var f_input : float = 0.0
+	if current_speed > 0.1:
+		var applied_drag : float = drag
+		
+		# 6. Optional: Calculate carving/braking friction 
+		# If the player is actively steering, check how sharp their turn is
+		if steer_direction.length_squared() > 0.0:
+			var turn_angle_match : float = player.velocity.normalized().dot(steer_direction)
+			# turn_angle_match is 1.0 if moving straight, 0.0 if turning hard 90 degrees
+			
+			# Scale friction up when turning aggressively across momentum
+			var carving_friction_factor : float = 0.5 # Increase for more speed-loss on hard turns
+			applied_drag += remap(turn_angle_match, -1.0, 1.0, carving_friction_factor, 0.0)
+		
+		# Apply total linear drag over time
+		player.velocity = lerp(player.velocity, Vector3.ZERO, applied_drag * delta)
 	
-	# we only want to have forward or backward affect the player if they are moving slowly
-	if player.velocity.length() <= speed:
-		f_input = Input.get_axis("forward", "backward")
-	
-	var h_input : float = Input.get_action_strength("right") - Input.get_action_strength("left")
-	direction = Vector3(h_input, 0, f_input).rotated(Vector3.UP, h_rot).normalized()
-	
-	#var wish_vel : Vector3 = direction * speed
-	var wish_vel : Vector3 = direction * player.velocity.length()
-	
-	# calculate angle between the wish velocity and current velocity, and sample it on the curve
-	var angle_diff : float = rad_to_deg(getHorizontalAngle(player.velocity, wish_vel))
-	var samplePoint = (angle_diff - minSkiStrafeAngle) / maxSkiStrafeAngle
-	
-	# strength of the wish velocity depends on the value obtained by the curve
-	wish_vel *= 1.0 + (skiStrafeCurve.sample(samplePoint) * skiStrafeModifier)
-	print(1.0  + (skiStrafeCurve.sample(samplePoint) * skiStrafeModifier))
-
-	# speeding up or slowing down?
-	if direction.length() > 0:
-		player.velocity = lerp(player.velocity, wish_vel, accel * delta)
-	else:
-		player.velocity = lerp(player.velocity, wish_vel, drag * delta)
-	
-	player.velocity += gravity_vec
+	# 7. Apply steering control to redirect remaining momentum
+	if steer_direction.length_squared() > 0.0:
+		var turn_sharpness : float = 2.0 
+		
+		# Recalculate speed after drag
+		var post_drag_speed := player.velocity.length()
+		var target_velocity_dir = lerp(player.velocity.normalized(), steer_direction, turn_sharpness * delta).normalized()
+		
+		# Re-assign velocity keeping your speed intact, just pointing in the new carved direction
+		player.velocity = target_velocity_dir * post_drag_speed
+		
 	player.move_and_slide()
-	return
