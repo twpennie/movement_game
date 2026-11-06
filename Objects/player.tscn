@@ -23,11 +23,10 @@ font_size = 25
 font_color = Color(0.0035191667, 0.0035191681, 0.0035191672, 1)
 
 [node name="Player" type="CharacterBody3D" unique_id=419475376]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43358433, 0)
 script = ExtResource("1_y0qk3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=83563798]
-transform = Transform3D(-0.9999756, -0.0069812606, 8.7421576e-08, -0.006981164, 0.9999619, 0.005235964, -3.6641046e-05, 0.005235836, -0.9999863, 0, 0.44603193, 0)
+transform = Transform3D(-0.9999756, -0.0069812606, 1.5099373e-07, -0.0069811638, 0.9999619, 0.005235964, -3.6704616e-05, 0.0052358354, -0.9999863, 0, 0.44603193, 0)
 layers = 2
 material_override = SubResource("StandardMaterial3D_gt2fw")
 mesh = ExtResource("3_x20fu")

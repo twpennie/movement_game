@@ -2,8 +2,8 @@ extends NormalMovementMode
 class_name SkiMovementMode
 
 const slideStartAngle : float = 1
-const slopeAccel: float = 20 
-const skiDrag : float = 0.1 
+const slopeAccel: float = 30 
+const skiDrag : float = 0.05 
 const skiFloorAccel : float = 0.5 
 
 # ski strafe
