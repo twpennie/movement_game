@@ -69,7 +69,10 @@ func ski_move(player: CharacterBody3D, delta: float, accel : float, drag : float
 				var turn_angle_match : float = player.velocity.normalized().dot(steer_direction)
 				
 				# Scale friction up when turning aggressively across momentum
-				var carving_friction_factor : float = 0.1 # Increase for more speed-loss on hard turns
+				# negative maybe is more fun, it negates half of the ground friction when turning. So optimal
+				# movement would be to strafe side to side kind of like bhopping. Then maybe crouch turning should slow you down but allow
+				# for faster turns
+				var carving_friction_factor : float = -0.05 # Increase for more speed-loss on hard turns
 				applied_drag += remap(turn_angle_match, -1.0, 1.0, carving_friction_factor, 0.0)
 			
 		# Apply total linear drag over time
@@ -82,6 +85,7 @@ func ski_move(player: CharacterBody3D, delta: float, accel : float, drag : float
 			
 		# Apply steering control to redirect remaining momentum as long as the plaeyr isnt attempting to turn too sharply
 		if !(player_facing_turning_relation < player_turn_limit) and steer_direction.length_squared() > 0.0:
+			
 			var turn_sharpness : float = 2.0 
 			
 			# Recalculate speed after drag
